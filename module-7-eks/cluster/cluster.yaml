@@ -1,0 +1,35 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: eks-fundamentals
+  region: us-east-1
+  version: "1.31"
+
+iam:
+  withOIDC: true
+
+managedNodeGroups:
+  - name: node-group-1
+    instanceType: t3.medium
+    minSize: 1
+    maxSize: 3
+    desiredCapacity: 2
+    volumeSize: 20
+    iam:
+      attachPolicyARNs:
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+
+addons:
+  - name: vpc-cni
+    version: latest
+  - name: coredns
+    version: latest
+  - name: kube-proxy
+    version: latest
+  - name: aws-ebs-csi-driver
+    version: latest
+    wellKnownPolicies:
+      ebsCSIController: true
