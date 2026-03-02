@@ -1,0 +1,51 @@
+replicaCount: 3
+
+image:
+  repository: nginx
+  tag: "1.25"
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 80
+  nodePort: 30082
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "200m"
+    memory: "256Mi"
+
+config:
+  appEnv: "production"
+  logLevel: "info"
+  maxConnections: "100"
+  appVersion: "1.0.0"
+
+secret:
+  databasePassword: "c3VwZXJzZWNyZXRwYXNzd29yZA=="
+  apiKey: "bXlhcGlrZXkxMjM="
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 50
+
+storage:
+  enabled: true
+  size: 1Gi
+  storageClassName: standard
+  mountPath: /data
+
+probes:
+  liveness:
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    failureThreshold: 3
+  readiness:
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    failureThreshold: 3
