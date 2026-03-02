@@ -77,3 +77,14 @@ helm list -n dev
 helm uninstall web-app --namespace dev
 minikube delete
 ```
+
+### Module 7: AWS EKS
+Migrated the full application to AWS EKS using eksctl. Provisioned a 2-node managed node group across 2 Availability Zones in us-east-1 with the EBS CSI Driver addon for persistent storage.
+
+Installed the AWS Load Balancer Controller via Helm with IAM Roles for Service Accounts (IRSA) using OIDC federation. Replaced the minikube NodePort Service with an internet-facing AWS Network Load Balancer serving live traffic via public DNS.
+
+Deployed the same Helm chart from Module 6 using a separate values-eks.yaml file, changing only the service type, storage class, and load balancer annotations. No changes to the chart templates.
+
+Wrote a teardown script to cleanly delete all AWS resources including the Helm releases, IAM roles, OIDC provider, node group, and EKS control plane.
+
+Tools: EKS, eksctl, AWS NLB, EBS CSI Driver, IRSA, OIDC, Helm, IAM
