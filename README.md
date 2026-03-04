@@ -88,3 +88,14 @@ Deployed the same Helm chart from Module 6 using a separate values-eks.yaml file
 Wrote a teardown script to cleanly delete all AWS resources including the Helm releases, IAM roles, OIDC provider, node group, and EKS control plane.
 
 Tools: EKS, eksctl, AWS NLB, EBS CSI Driver, IRSA, OIDC, Helm, IAM
+
+### Module 8: CI/CD Pipeline
+Built a GitHub Actions pipeline that automatically builds, pushes, and deploys to EKS on every push to main.
+
+Pipeline stages: Helm lint and validate on all PRs, Docker image build and push to Amazon ECR, Helm upgrade to EKS on merge to main, and deployment verification via kubectl rollout status.
+
+Configured OIDC federation between GitHub Actions and AWS IAM so the pipeline assumes a role directly with no long-lived AWS access keys stored in GitHub secrets.
+
+Built a custom nginx Docker image with a static HTML page to replace the plain nginx:1.25 image, giving the pipeline a real artifact to build and push.
+
+Tools: GitHub Actions, Amazon ECR, OIDC, IAM, Docker, Helm, kubectl
