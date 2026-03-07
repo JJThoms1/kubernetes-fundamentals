@@ -1,0 +1,35 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: web-app-alerts
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+  - name: web-app
+    rules:
+    - alert: WebAppHighCPU
+      expr: |
+        sum(rate(container_cpu_usage_seconds_total{namespace="dev", container="web-app"}[5m])) 
+        / 
+        sum(kube_pod_container_resource_limits{namespace="dev", container="web-app", resource="cpu"}) 
+        > 0.5
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Web app CPU usage above 50%"
+        description: "Web app pods are using more than 50% of their CPU limit for over 1 minute."
+
+    - alert: WebAppPodDown
+      expr: |
+        kube_deployment_status_replicas_available{namespace="dev", deployment="web-app"} 
+        < 
+        kube_deployment_spec_replicas{namespace="dev", deployment="web-app"}
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Web app pod count below desired"
+        description: "One or more web-app pods are unavailable for over 1 minute."
