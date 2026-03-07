@@ -99,3 +99,12 @@ Configured OIDC federation between GitHub Actions and AWS IAM so the pipeline as
 Built a custom nginx Docker image with a static HTML page to replace the plain nginx:1.25 image, giving the pipeline a real artifact to build and push.
 
 Tools: GitHub Actions, Amazon ECR, OIDC, IAM, Docker, Helm, kubectl
+
+### Module 9: Observability
+Deployed the kube-prometheus-stack via Helm into a dedicated monitoring namespace, installing Prometheus, Grafana, AlertManager, Node Exporter, and kube-state-metrics in a single chart.
+
+Configured Grafana with an internet-facing AWS NLB and explored pre-built dashboards for cluster-wide CPU, memory, and network metrics, as well as per-pod metrics for the web-app deployment in the dev namespace.
+
+Created a PrometheusRule custom resource with two alert rules: WebAppHighCPU fires when pods exceed 50% CPU for over 1 minute, and WebAppPodDown fires when available replicas fall below desired count.
+
+Tools: Prometheus, Grafana, AlertManager, kube-prometheus-stack, PrometheusRule, Helm, AWS NLB
