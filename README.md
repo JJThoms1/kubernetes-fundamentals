@@ -108,3 +108,16 @@ Configured Grafana with an internet-facing AWS NLB and explored pre-built dashbo
 Created a PrometheusRule custom resource with two alert rules: WebAppHighCPU fires when pods exceed 50% CPU for over 1 minute, and WebAppPodDown fires when available replicas fall below desired count.
 
 Tools: Prometheus, Grafana, AlertManager, kube-prometheus-stack, PrometheusRule, Helm, AWS NLB
+
+### Module 10: Terraform EKS
+Replaced eksctl with three standalone Terraform root modules to provision the full EKS cluster infrastructure.
+
+The vpc module provisions a VPC across two availability zones with public and private subnets, internet gateway, NAT gateways, and route tables with EKS subnet discovery tags.
+
+The iam module provisions the EKS cluster role, node group role, OIDC provider, and an IRSA role for the EBS CSI driver scoped to the kube-system service account.
+
+The cluster module reads outputs from vpc and iam via terraform_remote_state and provisions the EKS 1.31 cluster, managed node group, and four addons including the EBS CSI driver with IRSA.
+
+The existing CI/CD pipeline and Helm chart deployed unchanged on top of the new Terraform-provisioned cluster, confirming clean separation between infrastructure and application layers.
+
+Tools: Terraform, AWS EKS, VPC, IAM, OIDC, IRSA, S3 remote state, DynamoDB state locking, Helm, GitHub Actions
