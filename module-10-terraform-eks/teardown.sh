@@ -46,3 +46,15 @@ cd ~/kubernetes-fundamentals/module-10-terraform-eks/vpc
 terraform destroy -auto-approve
 
 echo "Done. All resources destroyed."
+
+echo "Cleaning up External Secrets Operator..."
+helm uninstall external-secrets -n external-secrets 2>/dev/null || true
+aws secretsmanager delete-secret \
+  --secret-id kubernetes-fundamentals/web-app \
+  --force-delete-without-recovery \
+  --region us-east-1 2>/dev/null || true
+aws iam detach-role-policy \
+  --role-name eksctl-eks-fundamentals-addon-iamserviceaccount-external-secrets-external-secrets-Role1 \
+  --policy-arn arn:aws:iam::949474132570:policy/ExternalSecretsPolicy 2>/dev/null || true
+aws iam delete-policy \
+  --policy-arn arn:aws:iam::949474132570:policy/ExternalSecretsPolicy 2>/dev/null || true
