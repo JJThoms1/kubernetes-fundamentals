@@ -1,9 +1,9 @@
 replicaCount: 3
 
 image:
-  repository: nginx
-  tag: "1.25"
-  pullPolicy: IfNotPresent
+  repository: 949474132570.dkr.ecr.us-east-1.amazonaws.com/kubernetes-fundamentals
+  tag: latest
+  pullPolicy: Always
 
 service:
   type: LoadBalancer
@@ -13,42 +13,11 @@ service:
     service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
     service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
 
-resources:
-  requests:
-    cpu: "100m"
-    memory: "128Mi"
-  limits:
-    cpu: "200m"
-    memory: "256Mi"
-
-config:
-  appEnv: "production"
-  logLevel: "info"
-  maxConnections: "100"
-  appVersion: "1.0.0"
-
 secret:
-  databasePassword: "c3VwZXJzZWNyZXRwYXNzd29yZA=="
-  apiKey: "bXlhcGlrZXkxMjM="
-
-autoscaling:
-  enabled: true
-  minReplicas: 2
-  maxReplicas: 6
-  targetCPUUtilizationPercentage: 50
+  useExternalSecrets: true
+  databasePassword: ""
+  apiKey: ""
 
 storage:
-  enabled: true
-  size: 5Gi
   storageClassName: gp2
-  mountPath: /data
-
-probes:
-  liveness:
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    failureThreshold: 3
-  readiness:
-    initialDelaySeconds: 5
-    periodSeconds: 5
-    failureThreshold: 3
+  size: 5Gi

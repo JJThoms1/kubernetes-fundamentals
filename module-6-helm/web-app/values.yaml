@@ -25,6 +25,7 @@ config:
   appVersion: "1.0.0"
 
 secret:
+  useExternalSecrets: false
   databasePassword: "c3VwZXJzZWNyZXRwYXNzd29yZA=="
   apiKey: "bXlhcGlrZXkxMjM="
 

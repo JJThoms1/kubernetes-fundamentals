@@ -53,12 +53,12 @@ spec:
         - name: DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Release.Name }}-secret
+              name: {{ if .Values.secret.useExternalSecrets }}web-app-secret{{ else }}{{ .Release.Name }}-secret{{ end }}
               key: DATABASE_PASSWORD
         - name: API_KEY
           valueFrom:
             secretKeyRef:
-              name: {{ .Release.Name }}-secret
+              name: {{ if .Values.secret.useExternalSecrets }}web-app-secret{{ else }}{{ .Release.Name }}-secret{{ end }}
               key: API_KEY
         livenessProbe:
           httpGet:
