@@ -121,3 +121,14 @@ The cluster module reads outputs from vpc and iam via terraform_remote_state and
 The existing CI/CD pipeline and Helm chart deployed unchanged on top of the new Terraform-provisioned cluster, confirming clean separation between infrastructure and application layers.
 
 Tools: Terraform, AWS EKS, VPC, IAM, OIDC, IRSA, S3 remote state, DynamoDB state locking, Helm, GitHub Actions
+
+### Module 11: AWS Secrets Manager + External Secrets Operator
+Replaced base64-encoded secrets in the Helm chart with secrets pulled live from AWS Secrets Manager using External Secrets Operator.
+
+Created a secret in AWS Secrets Manager containing DATABASE_PASSWORD and API_KEY. Deployed External Secrets Operator via Helm into a dedicated external-secrets namespace with an IRSA service account scoped to read only from the kubernetes-fundamentals/* secret path.
+
+Configured a ClusterSecretStore pointing at AWS Secrets Manager and an ExternalSecret that maps the AWS secret keys into a Kubernetes secret in the dev namespace. ESO syncs the secret every hour automatically.
+
+Updated the Helm chart with a useExternalSecrets flag. When true, the chart skips creating its own secret and references the ESO-managed secret instead. No credentials exist anywhere in Git history.
+
+Tools: AWS Secrets Manager, External Secrets Operator, IRSA, Helm, ClusterSecretStore, ExternalSecret
