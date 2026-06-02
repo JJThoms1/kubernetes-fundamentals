@@ -8,7 +8,7 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  ECR_REGISTRY: 949474132570.dkr.ecr.us-east-1.amazonaws.com
+  ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
   ECR_REPOSITORY: kubernetes-fundamentals
   EKS_CLUSTER: eks-fundamentals
   HELM_RELEASE: web-app
@@ -47,7 +47,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::949474132570:role/GitHubActions-EKS-Deploy
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActions-EKS-Deploy
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
