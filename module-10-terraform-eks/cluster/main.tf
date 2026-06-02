@@ -37,6 +37,7 @@ resource "aws_eks_cluster" "this" {
     )
     endpoint_public_access  = true
     endpoint_private_access = true
+    public_access_cidrs     = var.allowed_cidr_blocks
   }
 
   tags = var.tags
